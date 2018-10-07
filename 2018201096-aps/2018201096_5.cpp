@@ -141,7 +141,7 @@ int main()
     printStringBuilder(s15);
     stringBuilder s16=stringAppend(s1,s2);
     printStringBuilder(s16);
-    long index2 = findSubstring(s1, "dab");
+    long index2 = findSubstring(s1, "aab");
     cout<<index2;
     // printStringBuilder(s3);
     // printStringBuilder(s4);
