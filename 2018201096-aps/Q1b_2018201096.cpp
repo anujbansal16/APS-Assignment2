@@ -57,15 +57,42 @@ void buildSuffixTree(string s, int n, int result[]){
 
 int main(int argc, char const *argv[])
 {
-	string s1="banana";
-	string s=s1+s1;
+	string s="ababbaabb";
 	int result[s.size()];
 	buildSuffixTree(s,s.size(),result);
-	for (int i = 0; i < s.size(); ++i){
-		if(result[i]<s1.size()){
-			cout<<s.substr(result[i],s1.size());
-			break;
+	int lcp[s.size()];
+	int result3[s.size()];
+	// cout<<s.substr(result[0],s.size()-result[0])<<endl;
+	memset(lcp,0,sizeof(lcp));
+	memset(result3,0,sizeof(result3));
+	result3[0]=1;
+	for (int i = 0; i < s.size()-1; ++i){
+		int j=result[i],k=result[i+1];
+		bool flag=true;
+		cout<<s.substr(j,s.size())<<endl;
+		while(j<s.size()&&k<s.size()){
+			if(s[j]!=s[k]){
+				flag=false;
+				break;
+			}
+			lcp[i]++;
+			j++;k++;
 		}
 	}
+	for (int i = 0; i < s.size(); ++i){
+		cout<<result[i]<<" "<<s.substr(result[i],s.size())<<"\n";
+	}
+	cout<<endl;
+	for (int i = 0; i < s.size(); ++i)
+		cout<<lcp[i]<<" ";
+	cout<<endl;
+	int K=4;
+	int ans=0;
+	for(int i = 0;i<(s.size()-3+1);i++){
+		ans=max(ans, min(lcp[i],lcp[i+3]));
+		cout<<i<<" "<<i+3<<" "<<ans<<"\n";
+	}
+	cout<<endl;
+    cout<<ans;
 	return 0;
 }
