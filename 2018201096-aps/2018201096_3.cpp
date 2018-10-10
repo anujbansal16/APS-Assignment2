@@ -43,8 +43,7 @@ int main()
 	scanf("%ld%ld", &n, &k);
 	l a[n];
 	rep(i,0,n)
-		a[i]=i;
-		// scanf("%ld", &a[i]);
+		scanf("%ld", &a[i]);
 
     clock_t tStart = clock();
 	long kth=findKth(a,0,n-1,k);
