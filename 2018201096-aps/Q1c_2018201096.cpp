@@ -21,7 +21,7 @@ bool comp(suffix s1, suffix s2){
 	}
 }
 
-void buildSuffixTree(string s, int n, int result[]){
+void buildSuffixArray(string s, int n, int result[]){
 	suffix suffixes[n];
 	int indexes[n];
 	for (int i = 0; i < n; ++i)
@@ -57,48 +57,64 @@ void buildSuffixTree(string s, int n, int result[]){
 
 int main(int argc, char const *argv[])
 {
-	string s="dcabca";
-	int result[s.size()];
-	buildSuffixTree(s,s.size(),result);
-	int lcp[s.size()];
-	int result3[s.size()];
-	// cout<<s.substr(result[0],s.size()-result[0])<<endl;
+	string s;
+	cin>>s;
+	string s1=s;
+	int oLength=s.size();
+	int k=0;
+	for(int j=oLength-1;j>=0;j--)
+		s1[k++]=s[j];
+	
+	s1=s+"#"+s1;//banana#ananab
+	int mLength=s1.size();//size of banana
+	int result[s1.size()];//size of banana#ananab
+	
+	buildSuffixArray(s1,s1.size(),result);
+
+	int lcp[s1.size()];//lcp calculated in nlogn
 	memset(lcp,0,sizeof(lcp));
-	memset(result3,0,sizeof(result3));
-	result3[0]=1;
-	int inv[s.size()];
-	for (int i=0;i<s.size();i++) 
+	int inv[mLength];
+	for (int i=0;i<mLength;i++) 
         inv[result[i]] =i; 
-    int k=0;
-	for (int i=0;i<s.size();++i){
-		if(inv[i]==s.size()-1){
+    k=0;
+    //ksai algorithm
+	for (int i=0;i<mLength;++i){
+		if(inv[i]==mLength-1){
 			k=0;
 			continue;
 		}
         int j=result[inv[i]+1];//next suffix 
         // Directly start matching from k'th index as 
         // at-least k-1 characters will match 
-        while (i+k<s.size() && j+k<s.size() && s[i+k]==s[j+k]) 
+        while (i+k<mLength && j+k<mLength && s1[i+k]==s1[j+k]) 
             k++; 
         lcp[inv[i]]=k; // lcp for the present suffix. 
         // Deleting the starting character from the string. 
         if(k>0) 
             k--; 
 	}
-	for (int i = 0; i < s.size(); ++i){
-		cout<<result[i]<<" "<<s.substr(result[i],s.size())<<"\n";
-	}
-	cout<<endl;
-	for (int i = 0; i < s.size(); ++i)
-		cout<<lcp[i]<<" ";
-	cout<<endl;
-	int K=4;
-	int ans=0;
-	// for(int i = 0;i<(s.size()-3+1);i++){
-	// 	ans=max(ans, min(lcp[i],lcp[i+3]));
-	// 	cout<<i<<" "<<i+3<<" "<<ans<<"\n";
-	// }
+	// for (int i = 0; i < mLength; ++i)
+	// 	cout<<result[i]<<" ";
 	// cout<<endl;
- //    cout<<ans;
+	// for (int i = 0; i < mLength; ++i)
+	// 	cout<<lcp[i]<<" ";
+	// cout<<endl;
+	int position=0;
+	int longestlength=0;
+    for(int i=0;i<mLength-1;++i)
+    {
+        if((lcp[i]>longestlength))
+        {
+            if((result[i+1]<oLength && result[i]>oLength)||(result[i]<oLength && result[i+1]>oLength))
+            {	
+                longestlength=lcp[i];
+                position=result[i];
+                // cout<<"string "<<s1.substr(position,longestlength)<<" "<<position<<" " << longestlength<<endl;
+            }
+        }
+    }
+    cout<<"longest Palindrome length "<<longestlength;
+    cout<<" with string "<<s1.substr(position,longestlength)<<endl;
+	
 	return 0;
 }
